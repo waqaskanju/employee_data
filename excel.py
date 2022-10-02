@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 
-wb = load_workbook(filename="res/final_pst.xlsx")
+wb = load_workbook(filename="res/final_pst.xlsx") # add your own file can't upload file to github
 
 current_sheet = wb['Sheet1']
 print(current_sheet.max_row)
