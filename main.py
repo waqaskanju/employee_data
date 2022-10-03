@@ -1,12 +1,10 @@
-from ast import For
-from enum import auto
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-from function import fill_form, wait
+from function import fill_form, wait, format_date
 from openpyxl import load_workbook
 
 def open_employee():
@@ -56,15 +54,15 @@ while True:
 wb = load_workbook(filename="res/final_pst.xlsx") # add your own file can't upload file to github
 
 current_sheet = wb['Sheet1']
-wait(5)
-for x in range(8, 12):
+for x in range(2, 93):
   open_employee()
+  wait(8)
   name = current_sheet.cell(row=x, column=3).value
   f_name = current_sheet.cell(row=x, column=4).value
   dob = current_sheet.cell(row=x, column=5).value
   nic = current_sheet.cell(row=x, column=6).value
   nic = str(nic)
-  fill_form(name, f_name, dob, nic)
+  fill_form(name, f_name, format_date(dob), nic)
   current_sheet.cell(row = x, column = 10).value = 'PASSED'
   wb.save("res/final_pst.xlsx")
   wait(10)
