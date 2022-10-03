@@ -30,7 +30,6 @@ def open_employee():
 
 driver = webdriver.Firefox(executable_path="./driver/geckodriver.exe")
 driver.get("http://175.107.63.148:9090/ords/r/emis/human-resource-management-information-system-hrmis")
-
 inputName = driver.find_element(By.ID, "P9999_USERNAME")
 inputName.clear()
 inputName.send_keys("deoswatmale")
