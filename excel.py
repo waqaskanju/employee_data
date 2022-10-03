@@ -9,9 +9,10 @@ print(current_sheet.max_row)
 # Column 5 = DOB
 # Column 6 = NICf
 
-for x in range(1, 11):
+for x in range(8, 12):
   name = current_sheet.cell(row=x, column=3).value
   f_name = current_sheet.cell(row=x, column=4).value
   dob = current_sheet.cell(row=x, column=5).value
   nic = current_sheet.cell(row=x, column=6).value
+  nic = str(nic)
   print(f'Name = {name}, Father Name = {f_name}, Date Of Birth = {dob}, NIC = {nic}, ')

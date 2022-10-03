@@ -1,26 +1,35 @@
 from ast import For
+from enum import auto
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
-from time import sleep
+from function import fill_form, wait
+from openpyxl import load_workbook
+
+def open_employee():
+  while True:
+    try:
+      myElem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, 't_TreeNav_3')))
+      myElem.click()
+      print("t_TreeNav_3 is ready!")
+      break
+    except TimeoutException:
+        print("Loading took too much time!")
+  wait(10)
+  while True:
+    try:
+      myElem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#B23935025578417233 > span:nth-child(2)')))
+      myElem.click()
+      print("Employee Button is ready!")
+      break
+    except TimeoutException:
+        print("Loading took too much time!")
 
 driver = webdriver.Firefox(executable_path="./driver/geckodriver.exe")
 driver.get("http://175.107.63.148:9090/ords/r/emis/human-resource-management-information-system-hrmis")
-# assert "Python" in driver.title
-# elem = driver.find_element(By.NAME, "q")
-# elem.clear()
-# elem.send_keys("pycon")
-# elem.send_keys(Keys.RETURN)
-# assert "No results found." not in driver.page_source
-# driver.close()
-def wait(n):
-  for x in range(0, n):
-    sleep(1)
-    print(x)
 
 inputName = driver.find_element(By.ID, "P9999_USERNAME")
 inputName.clear()
@@ -45,48 +54,20 @@ while True:
   except TimeoutException:
       print("Loading took too much time!")
 
-while True:
-  wait(5)
-  try:
-    myElem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, 't_TreeNav_3')))
-    myElem.click()
-    print("t_TreeNav_3 is ready!")
-    break
-  except TimeoutException:
-      print("Loading took too much time!")
+wb = load_workbook(filename="res/final_pst.xlsx") # add your own file can't upload file to github
 
-while True:
-  wait(5)
-  try:
-    myElem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#B23935025578417233 > span:nth-child(2)')))
-    myElem.click()
-    print("Employee Button is ready!")
-    break
-  except TimeoutException:
-      print("Loading took too much time!")
-
-while True:
-  wait(5)
-  try:
-    wait(10)
-    print("P31_EMP_NAME")
-    myElem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#P31_EMP_NAME')))
-    myElem.clear()
-    myElem.send_keys('Hello World')
-    break
-  except TimeoutException:
-      print
-
-
-# navButton = driver.find_element(By.CSS_SELECTOR, "#t_Button_navControl")
-# #navButton.click()
-# navButton.send_keys(Keys.RETURN)
-# wait(10)
-
-# employeeButton = driver.find_element(By.ID, "t_TreeNav_3")
-# employeeButton.send_keys(Keys.RETURN)
-
-# driver.implicitly_wait(10)
-# sleep(10)
-
+current_sheet = wb['Sheet1']
+wait(5)
+for x in range(8, 12):
+  open_employee()
+  name = current_sheet.cell(row=x, column=3).value
+  f_name = current_sheet.cell(row=x, column=4).value
+  dob = current_sheet.cell(row=x, column=5).value
+  nic = current_sheet.cell(row=x, column=6).value
+  nic = str(nic)
+  fill_form(name, f_name, dob, nic)
+  current_sheet.cell(row = x, column = 10).value = 'PASSED'
+  wb.save("res/final_pst.xlsx")
+  wait(10)
+  
 
